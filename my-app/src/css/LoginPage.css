@@ -106,3 +106,13 @@
     letter-spacing: 1px;
     margin: 0;
 }
+
+.btn .icon {
+    width: 1.0em;
+    /* 아이콘 크기 */
+    height: 1.0em;
+    margin-right: 0.3em;
+    /* 텍스트와 아이콘 간격 */
+    mix-blend-mode: multiply;
+    opacity: 0.8;
+}

@@ -1,0 +1,213 @@
+/* src/css/MainPage.css */
+
+.app-container {
+    display: flex;
+    height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 240px;
+    background-color: #111;
+    color: #ddd;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+}
+
+.create-btn {
+    background-color: #20a8e0;
+    border: none;
+    color: #fff;
+    padding: 0.6rem;
+    margin-bottom: 1rem;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+.nav-group,
+.explore {
+    margin-bottom: 1.5rem;
+}
+
+.nav-item {
+    display: block;
+    color: #bbb;
+    text-decoration: none;
+    padding: 0.4rem 0;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.nav-item:hover,
+.nav-item.active {
+    color: #fff;
+}
+
+.explore-title {
+    font-size: 0.75rem;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    color: #888;
+}
+
+.plan-info {
+    margin-top: auto;
+    font-size: 0.75rem;
+    color: #888;
+}
+
+/* Main Area */
+.main-area {
+    flex: 1;
+    background-color: #181a1b;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Top bar */
+.topbar {
+    height: 48px;
+    background-color: #202225;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1rem;
+    font-size: 0.9rem;
+}
+
+.search-placeholder {
+    opacity: 0.6;
+}
+
+.topbar .quick-link-btn {
+    background: none;
+    border: none;
+    color: #ccc;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.topbar .quick-link-btn:hover {
+    color: #fff;
+}
+
+/* Loading */
+.loading {
+    color: #fff;
+    text-align: center;
+    margin-top: 2rem;
+}
+
+/* Hero section */
+.hero {
+    padding: 2rem;
+}
+
+.hero h2 {
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+.hero-input {
+    display: flex;
+}
+
+.hero-input input {
+    flex: 1;
+    padding: 0.6rem;
+    border: none;
+    border-radius: 4px 0 0 4px;
+    background-color: #242526;
+    color: #fff;
+}
+
+.hero-input input::placeholder {
+    color: #888;
+}
+
+.start-btn {
+    padding: 0.6rem 1rem;
+    border: none;
+    background-color: #20a8e0;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 0 4px 4px 0;
+    font-size: 0.9rem;
+}
+
+/* Quick links */
+.quick-links {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0 2rem;
+    margin-top: 1rem;
+}
+
+.quick-link-btn {
+    background-color: #242526;
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 0.85rem;
+}
+
+.quick-link-btn:hover {
+    background-color: #2a2c2d;
+}
+
+/* Recent Apps */
+.recent-apps {
+    flex: 1;
+    padding: 2rem;
+}
+
+.recent-apps h3 {
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.cards {
+    display: flex;
+    gap: 1rem;
+}
+
+.app-card {
+    background-color: #242526;
+    padding: 1rem;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    width: 200px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.app-card:hover {
+    background-color: #2a2c2d;
+}
+
+.app-card .icon {
+    background-color: #20a8e0;
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.75rem;
+    font-weight: bold;
+    color: #fff;
+}
+
+.app-card .info small {
+    display: block;
+    color: #888;
+    margin-top: 0.25rem;
+    font-size: 0.8rem;
+}

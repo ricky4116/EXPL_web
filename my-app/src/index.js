@@ -7,9 +7,11 @@ import './css/index.css';
 import LoginPage from './components/LoginPage';
 import SignPage from './components/SignPage';
 import ForgotPage from './components/ForgotPage';
+import MainPage from './components/MainPage';
+import ProjectPage from './components/ProjectPage';
 import reportWebVitals from './reportWebVitals';
 
-console.log('⏩ index.js loaded');
+
 const container = document.getElementById('root');
 if (!container) throw new Error('Root element not found');
 
@@ -23,6 +25,8 @@ root.render(
         {/* 2) 회원가입, 비번찾기는 명시적으로 등록 */}
         <Route path="/sign" element={<SignPage />} />
         <Route path="/forgot" element={<ForgotPage />} />
+        <Route path="/main" element={<MainPage />} />
+        <Route path="/project" element={<ProjectPage />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
