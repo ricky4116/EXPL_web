@@ -9,7 +9,7 @@
 /* Sidebar */
 .sidebar {
     width: 240px;
-    background-color: #111;
+    background-color: #292D3E;
     color: #ddd;
     display: flex;
     flex-direction: column;
@@ -62,7 +62,7 @@
 /* Main Area */
 .main-area {
     flex: 1;
-    background-color: #181a1b;
+    background-color: #292D3E;
     color: #fff;
     display: flex;
     flex-direction: column;
@@ -71,7 +71,7 @@
 /* Top bar */
 .topbar {
     height: 48px;
-    background-color: #202225;
+    background-color: #292D3E;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -121,7 +121,7 @@
     padding: 0.6rem;
     border: none;
     border-radius: 4px 0 0 4px;
-    background-color: #242526;
+    background-color: #292D3E;
     color: #fff;
 }
 
@@ -148,7 +148,7 @@
 }
 
 .quick-link-btn {
-    background-color: #242526;
+    background-color: #292D3E;
     border: none;
     padding: 0.5rem 1rem;
     cursor: pointer;
@@ -158,7 +158,7 @@
 }
 
 .quick-link-btn:hover {
-    background-color: #2a2c2d;
+    background-color: #2f3246;
 }
 
 /* Recent Apps */
@@ -178,7 +178,7 @@
 }
 
 .app-card {
-    background-color: #242526;
+    background-color: #292D3E;
     padding: 1rem;
     border-radius: 6px;
     display: flex;
@@ -189,7 +189,7 @@
 }
 
 .app-card:hover {
-    background-color: #2a2c2d;
+    background-color: #2f3246;
 }
 
 .app-card .icon {
