@@ -1,105 +1,187 @@
-.ide-container {
-    display: grid;
-    grid-template-rows: 50px 1fr;
+.replit-ide {
+    display: flex;
+    flex-direction: column;
     height: 100vh;
-    font-family: sans-serif;
+    background: #181818;
+    color: #ddd;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
-.ide-header {
+.replit-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 40px;
+    padding: 0 12px;
+    background: #202020;
+    border-bottom: 1px solid #333;
+}
+
+.header-left {
     display: flex;
     align-items: center;
-    padding: 0 16px;
-    background: #1e1e1e;
+}
+
+.icon-btn {
+    background: none;
+    border: none;
+    color: #ccc;
+    font-size: 16px;
+    cursor: pointer;
+    margin-right: 8px;
+}
+
+.project-title {
+    font-weight: bold;
+    cursor: pointer;
     color: #fff;
 }
 
-.ide-back-btn {
-    margin-right: 12px;
-    background: transparent;
+.header-right .run-btn {
+    background: #22aaff;
     border: none;
-    color: #fff;
-    font-size: 18px;
+    color: #111;
+    font-weight: bold;
+    padding: 4px 12px;
+    border-radius: 4px;
     cursor: pointer;
 }
 
-.ide-body {
-    display: grid;
-    grid-template-columns: 200px 1fr;
+.header-right .run-btn:hover {
+    background: #00c4ff;
 }
 
-.file-tree {
-    background: #2d2d2d;
-    color: #fff;
-    padding: 12px;
+.replit-body {
+    display: flex;
+    flex: 1;
+}
+
+.file-explorer {
+    width: 200px;
+    background: #252525;
+    border-right: 1px solid #333;
+    display: flex;
+    flex-direction: column;
+}
+
+.explorer-header {
+    padding: 8px;
+    font-size: 12px;
+    text-transform: uppercase;
+    color: #888;
+}
+
+.file-list {
+    flex: 1;
+    overflow-y: auto;
 }
 
 .file-item {
-    padding: 6px 10px;
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 8px;
     cursor: pointer;
+}
+
+.file-item:hover {
+    background: #333;
 }
 
 .file-item.active {
-    background: #3e3e3e;
+    background: #3a3a3a;
+    color: #fff;
 }
 
-.editor-pane {
-    position: relative;
+.del-btn {
+    background: none;
+    border: none;
+    color: #888;
+    cursor: pointer;
+}
+
+.explorer-footer {
+    padding: 8px;
+    display: flex;
+    gap: 4px;
+}
+
+.new-file,
+.new-folder {
+    flex: 1;
+    background: #22aaff;
+    border: none;
+    color: #111;
+    padding: 4px;
+    font-size: 12px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.new-file:hover,
+.new-folder:hover {
+    background: #00c4ff;
+}
+
+.main-pane {
+    flex: 1;
     display: flex;
     flex-direction: column;
+    background: #1e1e1e;
 }
 
-.form-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 150px;
-    padding: 20px;
-    background: rgba(30, 30, 30, 0.9);
-    overflow-y: auto;
-}
-
-.project-form {
+.editor-tabs {
     display: flex;
-    flex-direction: column;
-    color: #eee;
+    background: #282828;
+    height: 28px;
+    align-items: center;
+    padding-left: 8px;
+    border-bottom: 1px solid #333;
 }
 
-.project-form label {
-    margin-bottom: 16px;
+.editor-tabs .tab {
+    margin-right: 12px;
+    color: #ccc;
+}
+
+.editor-tabs .tab.active {
+    color: #fff;
     font-weight: bold;
 }
 
-.project-form input,
-.project-form textarea {
-    margin-top: 6px;
-    padding: 8px;
-    border-radius: 4px;
-    border: 1px solid #555;
-    background: #222;
-    color: #fff;
+.console-pane {
+    width: 300px;
+    background: #181818;
+    border-left: 1px solid #333;
+    display: flex;
+    flex-direction: column;
 }
 
-.project-form textarea {
-    min-height: 100px;
-    resize: vertical;
+.console-tabs {
+    display: flex;
+    height: 28px;
+    background: #202020;
+    border-bottom: 1px solid #333;
 }
 
-.create-btn {
-    align-self: flex-end;
-    padding: 8px 16px;
-    background: #03a9f4;
-    border: none;
-    border-radius: 4px;
+.console-tab {
+    flex: 1;
+    text-align: center;
+    line-height: 28px;
+    color: #888;
     cursor: pointer;
-    color: #fff;
 }
 
-.console-container {
-    height: 150px;
-    background: #1e1e1e;
-    padding: 10px;
+.console-tab.active {
+    background: #181818;
     color: #fff;
-    font-family: monospace;
+    font-weight: bold;
+}
+
+.console-view {
+    flex: 1;
+    background: #181818;
+    padding: 8px;
     overflow-y: auto;
+    font-family: monospace;
+    font-size: 13px;
 }
