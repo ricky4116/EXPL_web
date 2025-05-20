@@ -68,25 +68,25 @@ export default function MainPage() {
                 <button
                     className="create-btn"
                     onClick={handleCreateProject}  >
-                    + Create Project
+                    + 새 프로젝트 만들기
                 </button>
                 <nav className="nav-group">
-                    <a className="nav-item active">Home</a>
-                    <a className="nav-item">Apps</a>
-                    <a className="nav-item">Deployments</a>
-                    <a className="nav-item">Usage</a>
-                    <a className="nav-item">Teams</a>
+                    <a className="nav-item active"></a>
+                    <a className="nav-item"></a>
+                    <a className="nav-item"></a>
+                    <a className="nav-item"></a>
+                    <a className="nav-item"></a>
                 </nav>
                 <div className="explore">
-                    <p className="explore-title">Explore Replit</p>
-                    <a className="nav-item">Bounties</a>
-                    <a className="nav-item">Templates</a>
-                    <a className="nav-item">Learn</a>
-                    <a className="nav-item">Documentation</a>
+                    <p className="explore-title"></p>
+                    <a className="nav-item"></a>
+                    <a className="nav-item"></a>
+                    <a className="nav-item"></a>
+                    <a className="nav-item"></a>
                 </div>
                 <div className="plan-info">
-                    <p>Your Starter Plan</p>
-                    <small>Approaching plan limit for Public Apps.</small>
+                    <p></p>
+                    <small></small>
                 </div>
             </aside>
 
@@ -94,13 +94,13 @@ export default function MainPage() {
             <div className="main-area">
                 {/* Top bar */}
                 <header className="topbar">
-                    <div className="search-placeholder">Search &amp; run commands…</div>
+                    <div className="search-placeholder"></div>
                     <button className="quick-link-btn" onClick={handleLogout}>로그아웃</button>
                 </header>
 
                 {/* Hero section */}
                 <section className="hero">
-                    <h2>Hi 창민, what do you want to make?</h2>
+                    <h2>어떤 프로젝트를 만들겠습니까?</h2>
                     <div className="hero-input">
                         <input type="text" placeholder="Describe an app or site you want to create…" />
                         <button className="start-btn">Start building</button>
@@ -108,27 +108,10 @@ export default function MainPage() {
                 </section>
 
                 {/* Quick links */}
-                <section className="quick-links">
-                    {quickLinks.map((q, i) => (
-                        <button key={i} className="quick-link-btn">{q}</button>
-                    ))}
-                </section>
+
 
                 {/* Recent Apps */}
-                <section className="recent-apps">
-                    <h3>Your recent Apps</h3>
-                    <div className="cards">
-                        {recentApps.map((app, i) => (
-                            <div key={i} className="app-card">
-                                <div className="icon">C</div>
-                                <div className="info">
-                                    <strong>{app.name}</strong>
-                                    <small>{app.date}</small>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </section>
+
             </div>
         </div>
     );

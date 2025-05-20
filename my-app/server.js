@@ -1,83 +1,93 @@
-// server.js
-import express from 'express';
-import bodyParser from 'body-parser';
-import cors from 'cors';
-import bcrypt from 'bcryptjs';
-import session from 'express-session';
-import pgSession from 'connect-pg-simple';
-import { Pool } from 'pg';
+// server.js (CommonJS)
+require('dotenv').config();
+
+const express = require('express');
+const cors = require('cors');
+const session = require('express-session');
+const PgSession = require('connect-pg-simple')(session);
+const { Pool } = require('pg');
 
 const app = express();
-app.use(bodyParser.json());
-app.use(cors({
-    origin: 'http://localhost:3000',
-    credentials: true
-}));
 
+// 신뢰할 프록시 설정
+if (process.env.NODE_ENV === 'production') {
+    app.set('trust proxy', 1);
+}
+
+// AWS RDS(PostgreSQL) 연결 풀 설정
 const pool = new Pool({
-    host: 'localhost',
-    port: 5432,
-    user: 'postgres',
-    password: '1127',
-    database: 'graduate_web'
+    host: process.env.DB_HOST,
+    port: Number(process.env.DB_PORT) || 5432,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    ssl: process.env.DB_SSL === 'true'
+        ? { rejectUnauthorized: false }
+        : false,
 });
 
-// 세션 스토어 설정
-const PgStore = pgSession(session);
-app.use(session({
-    store: new PgStore({ pool }),
-    secret: '세션_비밀키를_여기에',
-    resave: false,
-    saveUninitialized: false,
-    cookie: { httpOnly: true, secure: false, maxAge: 86400000 }
+// 미들웨어
+app.use(express.json());
+app.use(cors({
+    origin: process.env.CLIENT_ORIGIN || 'http://localhost:3000',
+    credentials: true,
 }));
 
-// 회원가입 (변경 없음)
+// 세션 스토어 설정
+app.use(session({
+    name: 'sid',
+    store: new PgSession({ pool }),
+    secret: process.env.SESSION_SECRET || 'dev-secret',
+    resave: false,
+    saveUninitialized: false,
+    rolling: true,
+    cookie: {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 24 * 60 * 60 * 1000, // 1일
+    },
+}));
+
+// 회원가입 (비밀번호 해시 없이)
 app.post('/api/signup', async (req, res) => {
     const { email, password } = req.body;
     try {
-        const salt = bcrypt.genSaltSync(10);
-        const hashed = bcrypt.hashSync(password, salt);
-        const result = await pool.query(
+        const { rows } = await pool.query(
             `INSERT INTO users (email, password)
-       VALUES ($1, $2)
-       RETURNING created_at`,
-            [email, hashed]
+             VALUES ($1, $2)
+             RETURNING created_at`,
+            [email, password]
         );
-        res.json({ success: true, created_at: result.rows[0].created_at });
+        res.json({ success: true, created_at: rows[0].created_at });
     } catch (err) {
-        console.error(err);
+        console.error('Signup error:', err);
         res.status(500).json({ success: false, error: err.message });
     }
 });
 
-// 로그인
+// 로그인 (비밀번호 평문 비교)
 app.post('/api/login', async (req, res) => {
-    const { identifier, password } = req.body; // identifier === email
+    const { identifier, password } = req.body;
     try {
-        // email 컬럼만 조회
-        const result = await pool.query(
-            `SELECT email, password
-       FROM users
-       WHERE email = $1`,
+        const { rows } = await pool.query(
+            `SELECT email, password FROM users WHERE email = $1`,
             [identifier]
         );
-        if (result.rowCount === 0) {
+        if (!rows.length) {
             return res.json({ success: false, error: '사용자를 찾을 수 없습니다.' });
         }
 
-        const { email: userEmail, password: hash } = result.rows[0];
-        const isMatch = await bcrypt.compare(password, hash);
-        if (!isMatch) {
+        const { email: userEmail, password: storedPassword } = rows[0];
+        if (password !== storedPassword) {
             return res.json({ success: false, error: '비밀번호가 일치하지 않습니다.' });
         }
 
-        // 세션에 email 저장
         req.session.userEmail = userEmail;
-        return res.json({ success: true });
+        res.json({ success: true });
     } catch (err) {
-        console.error(err);
-        return res.status(500).json({ success: false, error: '서버 오류' });
+        console.error('Login error:', err);
+        res.status(500).json({ success: false, error: '서버 오류' });
     }
 });
 
@@ -86,16 +96,23 @@ app.get('/api/me', (req, res) => {
     if (req.session.userEmail) {
         return res.json({ loggedIn: true, email: req.session.userEmail });
     }
-    return res.json({ loggedIn: false });
+    res.json({ loggedIn: false });
 });
 
 // 로그아웃
 app.post('/api/logout', (req, res) => {
     req.session.destroy(err => {
-        if (err) return res.status(500).json({ success: false });
-        res.clearCookie('connect.sid');
-        return res.json({ success: true });
+        if (err) {
+            console.error('Logout error:', err);
+            return res.status(500).json({ success: false });
+        }
+        res.clearCookie('sid');
+        res.json({ success: true });
     });
 });
 
-app.listen(4000, () => console.log('Server running on port 4000'));
+// 서버 시작
+const PORT = process.env.PORT || 4000;
+app.listen(PORT, () => {
+    console.log(`✅ Server running on port ${PORT}`);
+});

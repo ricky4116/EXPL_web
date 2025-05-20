@@ -1,7 +1,6 @@
 // src/components/SignPage.jsx
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import bcrypt from 'bcryptjs';
 import '../css/SignPage.css';
 
 export default function SignPage() {
@@ -28,15 +27,11 @@ export default function SignPage() {
             return;
         }
 
-        // 클라이언트 측 해시 (선택)
-        const salt = bcrypt.genSaltSync(10);
-        const hashedPassword = bcrypt.hashSync(password, salt);
-
         try {
             const res = await fetch('http://localhost:4000/api/signup', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password: hashedPassword })
+                body: JSON.stringify({ email, password })
             });
             const data = await res.json();
 

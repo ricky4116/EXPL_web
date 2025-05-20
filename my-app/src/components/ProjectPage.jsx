@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Editor from '@monaco-editor/react';
-import { Terminal } from 'xterm';
-import 'xterm/css/xterm.css';
 import '../css/Projectpage.css';
 
 export default function ProjectPage() {
@@ -19,20 +17,8 @@ int main(void) {
         }
     ]);
     const [activeIndex, setActiveIndex] = useState(0);
-    const [activeTab, setActiveTab] = useState('Console');
-    const termRef = useRef(null);
-    const xtermRef = useRef(null);
     const editorRef = useRef(null);
-    const filePositionsRef = useRef({}); // store cursor positions per file
-
-    useEffect(() => {
-        xtermRef.current = new Terminal({ convertEol: true, theme: { background: '#181818', foreground: '#f5f5f5' } });
-        xtermRef.current.open(termRef.current);
-        xtermRef.current.writeln('Ready.');
-        const orig = console.log;
-        console.log = (...args) => { xtermRef.current.writeln(args.join(' ')); orig(...args); };
-        return () => { console.log = orig; };
-    }, []);
+    const filePositionsRef = useRef({});
 
     // Restore cursor position on file switch
     useEffect(() => {
@@ -61,7 +47,6 @@ int main(void) {
         }
     };
     const handleFileClick = idx => {
-        // save current position
         if (editorRef.current) {
             filePositionsRef.current[activeIndex] = editorRef.current.getPosition();
         }
@@ -76,9 +61,9 @@ int main(void) {
     const run = () => {
         if (!editorRef.current) return;
         const code = editorRef.current.getValue();
-        xtermRef.current.clear();
-        try { eval(code); } catch (e) { xtermRef.current.writeln(e.message); }
+        try { eval(code); } catch (e) { console.error(e); }
     };
+
     return (
         <div className="replit-ide">
             <header className="replit-header">
@@ -119,14 +104,6 @@ int main(void) {
                         onChange={val => setFiles(prev => prev.map((f, i) => i === activeIndex ? { ...f, content: val } : f))}
                         options={{ fontSize: 14 }}
                     />
-                </section>
-                <section className="console-pane">
-                    <div className="console-tabs">
-                        {['Console', 'Shell'].map(tab => (
-                            <div key={tab} className={`console-tab ${activeTab === tab ? 'active' : ''}`} onClick={() => setActiveTab(tab)}>{tab}</div>
-                        ))}
-                    </div>
-                    <div className="console-view" ref={termRef} />
                 </section>
             </div>
         </div>
