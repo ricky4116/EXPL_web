@@ -6,6 +6,7 @@ const cors = require('cors');
 const session = require('express-session');
 const PgSession = require('connect-pg-simple')(session);
 const { Pool } = require('pg');
+const { exec } = require('child_process');
 
 const app = express();
 
@@ -108,6 +109,23 @@ app.post('/api/logout', (req, res) => {
         }
         res.clearCookie('sid');
         res.json({ success: true });
+    });
+});
+
+// GPT 분석 API
+app.post('/api/analyze', (req, res) => {
+    exec('python analyze.py', (error, stdout, stderr) => {
+        if (error) {
+            console.error('Python 실행 오류:', stderr);
+            return res.status(500).json({ error: '분석 중 오류 발생' });
+        }
+        try {
+            const result = JSON.parse(stdout);
+            res.json(result);
+        } catch (e) {
+            console.error('분석 결과 파싱 실패:', stdout);
+            res.status(500).json({ error: '결과 처리 실패' });
+        }
     });
 });
 
