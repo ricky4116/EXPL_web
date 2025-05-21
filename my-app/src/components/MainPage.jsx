@@ -32,8 +32,8 @@ export default function MainPage() {
         { key: 'main', label: '홈화면', icon: Home },
         { key: 'projects', label: '프로젝트 관리', icon: Folder },
         { key: 'vulnList', label: '취약점 보고서', icon: FileText },
-        { key: 'vulnEdu', label: '취약점 정보', icon: Info },
-        { key: 'tos', label: '개인정보 약관', icon: FileSignature },
+        { key: 'vulnEdu', label: '취약점 정보', icon: FileSignature },
+        { key: 'tos', label: '개인정보 약관', icon: Info },
     ];
 
     // 클릭 외부영역 클릭시 메뉴 닫기
