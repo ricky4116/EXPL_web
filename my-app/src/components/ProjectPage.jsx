@@ -17,8 +17,13 @@ int main(void) {
         }
     ]);
     const [activeIndex, setActiveIndex] = useState(0);
+    const [analysisResult, setAnalysisResult] = useState('');
     const editorRef = useRef(null);
     const filePositionsRef = useRef({});
+    const consoleRef = useRef(null);
+    const [activeTab, setActiveTab] = useState('run');
+    const [runOutput, setRunOutput] = useState('');
+
 
     // Restore cursor position on file switch
     useEffect(() => {
@@ -27,6 +32,12 @@ int main(void) {
         editorRef.current.setPosition(pos);
         editorRef.current.revealPositionInCenter(pos);
     }, [activeIndex]);
+
+    useEffect(() => {
+        if (consoleRef.current) {
+            consoleRef.current.scrollTop = consoleRef.current.scrollHeight;
+        }
+    }, [analysisResult, runOutput]);
 
     const handleBack = () => navigate(-1);
     const handleRename = () => {
@@ -58,11 +69,23 @@ int main(void) {
             filePositionsRef.current[activeIndex] = e.position;
         });
     };
-    const run = () => {
-        if (!editorRef.current) return;
-        const code = editorRef.current.getValue();
-        try { eval(code); } catch (e) { console.error(e); }
-    };
+    const run = async () => {
+        setRunOutput('✅ 실행은 현재 지원되지 않습니다. 분석 결과를 확인하세요.');
+
+        try {
+            const analyzeRes = await fetch('http://localhost:4000/api/analyze', { method: 'POST' });
+            const result = await analyzeRes.json();
+
+            const formatted = Object.entries(result).map(
+            ([file, msg]) => `📄 ${file}\n${msg}`
+            ).join('\n\n');
+
+            setAnalysisResult(formatted);
+
+        } catch (err) {
+            setAnalysisResult('❌ 분석 중 오류 발생');
+        }
+        };
 
     return (
         <div className="replit-ide">
@@ -95,15 +118,39 @@ int main(void) {
                     <div className="editor-tabs">
                         <div className="tab active">{files[activeIndex].name}</div>
                     </div>
-                    <Editor
-                        height="calc(100% - 40px)"
-                        theme="vs-dark"
-                        language="c"
-                        value={files[activeIndex].content}
-                        onMount={handleEditorMount}
-                        onChange={val => setFiles(prev => prev.map((f, i) => i === activeIndex ? { ...f, content: val } : f))}
-                        options={{ fontSize: 14 }}
-                    />
+                    <div className="editor-area">
+                        <Editor
+                            height="100%"
+                            width="100%"
+                            theme="vs-dark"
+                            language="c"
+                            value={files[activeIndex].content}
+                            onMount={handleEditorMount}
+                            onChange={val => setFiles(prev => prev.map((f, i) => i === activeIndex ? { ...f, content: val } : f))}
+                            options={{ fontSize: 14 }}
+                        />
+                    </div>
+                    <div className="console-pane">
+                        <div className="console-tabs">
+                            <div
+                            className={`console-tab ${activeTab === 'run' ? 'active' : ''}`}
+                            onClick={() => setActiveTab('run')}
+                            >
+                            ▶ 실행 결과
+                            </div>
+                            <div
+                            className={`console-tab ${activeTab === 'analyze' ? 'active' : ''}`}
+                            onClick={() => setActiveTab('analyze')}
+                            >
+                            🔍 분석 결과
+                            </div>
+                        </div>
+                        <div className="console-view" ref={consoleRef}>
+                            <pre className="analysis-output">
+                                {activeTab === 'run' ? runOutput || '아직 실행 결과가 없습니다.' : analysisResult || '아직 분석 결과가 없습니다.'}
+                            </pre>
+                        </div>
+                    </div>
                 </section>
             </div>
         </div>

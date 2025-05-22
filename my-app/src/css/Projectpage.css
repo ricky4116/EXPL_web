@@ -53,7 +53,7 @@
 
 .replit-body {
     display: flex;
-    flex: 1;
+    height: calc(100% - 40px);
 }
 
 .file-explorer {
@@ -123,10 +123,12 @@
 }
 
 .main-pane {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    background: #292D3E;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
 }
 
 .editor-tabs {
@@ -136,11 +138,17 @@
     align-items: center;
     padding-left: 8px;
     border-bottom: 1px solid #333;
+    overflow-x: auto;
+    white-space: nowrap;
 }
 
 .editor-tabs .tab {
     margin-right: 12px;
     color: #ccc;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 150px;
 }
 
 .editor-tabs .tab.active {
@@ -149,7 +157,8 @@
 }
 
 .console-pane {
-    width: 300px;
+    height: 300px;
+    width: 100%;
     background: #292D3E;
     border-left: 1px solid #333;
     display: flex;
@@ -184,4 +193,25 @@
     overflow-y: auto;
     font-family: monospace;
     font-size: 13px;
+}
+
+.analysis-result {
+  height: 300px;
+  overflow-y: auto;
+  background: #1e1e1e;
+  border-top: 1px solid #333;
+  padding: 10px;
+  font-size: 13px;
+}
+
+
+.analysis-output {
+  white-space: pre-wrap;
+  color: #eee;
+}
+
+.editor-area {
+  flex-grow: 1;
+  min-height: 0;
+  width: 100%;
 }
