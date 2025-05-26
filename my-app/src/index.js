@@ -11,6 +11,15 @@ import MainPage from './components/MainPage';
 import ProjectPage from './components/ProjectPage';
 import reportWebVitals from './reportWebVitals';
 
+window.addEventListener('error', (event) => {
+  if (
+    event.message &&
+    event.message.includes('ResizeObserver loop completed with undelivered notifications')
+  ) {
+    // 에러 전파 중단
+    event.stopImmediatePropagation();
+  }
+});
 
 const container = document.getElementById('root');
 if (!container) throw new Error('Root element not found');
@@ -26,7 +35,7 @@ root.render(
         <Route path="/sign" element={<SignPage />} />
         <Route path="/forgot" element={<ForgotPage />} />
         <Route path="/main" element={<MainPage />} />
-        <Route path="/project" element={<ProjectPage />} />
+        <Route path="/project/:projectId" element={<ProjectPage />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

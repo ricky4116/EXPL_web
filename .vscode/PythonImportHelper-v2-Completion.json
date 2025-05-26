@@ -1,0 +1,223 @@
+[
+    {
+        "label": "Flask",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "request",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "jsonify",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "CORS",
+        "importPath": "flask_cors",
+        "description": "flask_cors",
+        "isExtraImport": true,
+        "detail": "flask_cors",
+        "documentation": {}
+    },
+    {
+        "label": "boto3",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "boto3",
+        "description": "boto3",
+        "detail": "boto3",
+        "documentation": {}
+    },
+    {
+        "label": "uuid",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "uuid",
+        "description": "uuid",
+        "detail": "uuid",
+        "documentation": {}
+    },
+    {
+        "label": "time",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "time",
+        "description": "time",
+        "detail": "time",
+        "documentation": {}
+    },
+    {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "subprocess",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "subprocess",
+        "description": "subprocess",
+        "detail": "subprocess",
+        "documentation": {}
+    },
+    {
+        "label": "json",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "json",
+        "description": "json",
+        "detail": "json",
+        "documentation": {}
+    },
+    {
+        "label": "openai",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "openai",
+        "description": "openai",
+        "detail": "openai",
+        "documentation": {}
+    },
+    {
+        "label": "upload_to_s3",
+        "kind": 2,
+        "importPath": "my-app.backend.main",
+        "description": "my-app.backend.main",
+        "peekOfCode": "def upload_to_s3():\n    try:\n        file = request.files['file']\n        filename, ext = os.path.splitext(file.filename)\n        timestamp = time.strftime(\"%Y%m%d_%H%M%S\")\n        unique_id = str(uuid.uuid4())[:8]\n        new_filename = f\"{filename}_{timestamp}_{unique_id}{ext}\"\n        s3_client.upload_fileobj(\n            file,\n            BUCKET_NAME,",
+        "detail": "my-app.backend.main",
+        "documentation": {}
+    },
+    {
+        "label": "compile_and_run",
+        "kind": 2,
+        "importPath": "my-app.backend.main",
+        "description": "my-app.backend.main",
+        "peekOfCode": "def compile_and_run():\n    try:\n        filename = request.json['filename']\n        # ↓ 프로젝트 내부 temp 디렉터리를 사용\n        local_path = os.path.join(TEMP_DIR, filename)\n        s3_client.download_file(BUCKET_NAME, filename, local_path)\n        # .c → .exe\n        binary_name = filename.replace('.c', '.exe')\n        binary_path = os.path.join(TEMP_DIR, binary_name)\n        # g++로 컴파일",
+        "detail": "my-app.backend.main",
+        "documentation": {}
+    },
+    {
+        "label": "app",
+        "kind": 5,
+        "importPath": "my-app.backend.main",
+        "description": "my-app.backend.main",
+        "peekOfCode": "app = Flask(__name__)\nCORS(app)\n# S3 세팅\ns3_client = boto3.client(\n    's3',\n    aws_access_key_id='AKIAVJSFQLOWK6VMQL47',\n    aws_secret_access_key='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',\n    region_name='ap-northeast-2'\n)\nBUCKET_NAME = 'graduate-bucket-122231'",
+        "detail": "my-app.backend.main",
+        "documentation": {}
+    },
+    {
+        "label": "s3_client",
+        "kind": 5,
+        "importPath": "my-app.backend.main",
+        "description": "my-app.backend.main",
+        "peekOfCode": "s3_client = boto3.client(\n    's3',\n    aws_access_key_id='AKIAVJSFQLOWK6VMQL47',\n    aws_secret_access_key='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',\n    region_name='ap-northeast-2'\n)\nBUCKET_NAME = 'graduate-bucket-122231'\n# 0. 프로젝트 내 temp 디렉터리 설정\nBASE_DIR = os.path.dirname(os.path.abspath(__file__))  # backend/app\nTEMP_DIR = os.path.join(BASE_DIR, \"temp\")",
+        "detail": "my-app.backend.main",
+        "documentation": {}
+    },
+    {
+        "label": "BUCKET_NAME",
+        "kind": 5,
+        "importPath": "my-app.backend.main",
+        "description": "my-app.backend.main",
+        "peekOfCode": "BUCKET_NAME = 'graduate-bucket-122231'\n# 0. 프로젝트 내 temp 디렉터리 설정\nBASE_DIR = os.path.dirname(os.path.abspath(__file__))  # backend/app\nTEMP_DIR = os.path.join(BASE_DIR, \"temp\")\nif not os.path.exists(TEMP_DIR):\n    os.makedirs(TEMP_DIR)\n# 1. 업로드 API (변경 없음)\n@app.route('/upload', methods=['POST'])\ndef upload_to_s3():\n    try:",
+        "detail": "my-app.backend.main",
+        "documentation": {}
+    },
+    {
+        "label": "BASE_DIR",
+        "kind": 5,
+        "importPath": "my-app.backend.main",
+        "description": "my-app.backend.main",
+        "peekOfCode": "BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # backend/app\nTEMP_DIR = os.path.join(BASE_DIR, \"temp\")\nif not os.path.exists(TEMP_DIR):\n    os.makedirs(TEMP_DIR)\n# 1. 업로드 API (변경 없음)\n@app.route('/upload', methods=['POST'])\ndef upload_to_s3():\n    try:\n        file = request.files['file']\n        filename, ext = os.path.splitext(file.filename)",
+        "detail": "my-app.backend.main",
+        "documentation": {}
+    },
+    {
+        "label": "TEMP_DIR",
+        "kind": 5,
+        "importPath": "my-app.backend.main",
+        "description": "my-app.backend.main",
+        "peekOfCode": "TEMP_DIR = os.path.join(BASE_DIR, \"temp\")\nif not os.path.exists(TEMP_DIR):\n    os.makedirs(TEMP_DIR)\n# 1. 업로드 API (변경 없음)\n@app.route('/upload', methods=['POST'])\ndef upload_to_s3():\n    try:\n        file = request.files['file']\n        filename, ext = os.path.splitext(file.filename)\n        timestamp = time.strftime(\"%Y%m%d_%H%M%S\")",
+        "detail": "my-app.backend.main",
+        "documentation": {}
+    },
+    {
+        "label": "_Known",
+        "kind": 6,
+        "importPath": "my-app.node_modules.flatted.python.flatted",
+        "description": "my-app.node_modules.flatted.python.flatted",
+        "peekOfCode": "class _Known:\n    def __init__(self):\n        self.key = []\n        self.value = []\nclass _String:\n    def __init__(self, value):\n        self.value = value\ndef _array_keys(value):\n    keys = []\n    i = 0",
+        "detail": "my-app.node_modules.flatted.python.flatted",
+        "documentation": {}
+    },
+    {
+        "label": "_String",
+        "kind": 6,
+        "importPath": "my-app.node_modules.flatted.python.flatted",
+        "description": "my-app.node_modules.flatted.python.flatted",
+        "peekOfCode": "class _String:\n    def __init__(self, value):\n        self.value = value\ndef _array_keys(value):\n    keys = []\n    i = 0\n    for _ in value:\n        keys.append(i)\n        i += 1\n    return keys",
+        "detail": "my-app.node_modules.flatted.python.flatted",
+        "documentation": {}
+    },
+    {
+        "label": "parse",
+        "kind": 2,
+        "importPath": "my-app.node_modules.flatted.python.flatted",
+        "description": "my-app.node_modules.flatted.python.flatted",
+        "peekOfCode": "def parse(value, *args, **kwargs):\n    json = _json.loads(value, *args, **kwargs)\n    wrapped = []\n    for value in json:\n        wrapped.append(_wrap(value))\n    input = []\n    for value in wrapped:\n        if isinstance(value, _String):\n            input.append(value.value)\n        else:",
+        "detail": "my-app.node_modules.flatted.python.flatted",
+        "documentation": {}
+    },
+    {
+        "label": "stringify",
+        "kind": 2,
+        "importPath": "my-app.node_modules.flatted.python.flatted",
+        "description": "my-app.node_modules.flatted.python.flatted",
+        "peekOfCode": "def stringify(value, *args, **kwargs):\n    known = _Known()\n    input = []\n    output = []\n    i = int(_index(known, input, value))\n    while i < len(input):\n        output.append(_transform(known, input, input[i]))\n        i += 1\n    return _json.dumps(output, *args, **kwargs)",
+        "detail": "my-app.node_modules.flatted.python.flatted",
+        "documentation": {}
+    },
+    {
+        "label": "analyze_project_with_gpt",
+        "kind": 2,
+        "importPath": "my-app.analyze",
+        "description": "my-app.analyze",
+        "peekOfCode": "def analyze_project_with_gpt(files: list[dict]) -> dict:\n    results = {}\n    for file in files:\n        path = file[\"path\"]\n        code = file[\"content\"]\n        prompt = f\"\"\"파일 경로: {path}\n보안 취약점을 찾아주세요. 줄 번호, 문제 설명, 개선 방법을 포함해주세요.\n```python\n{code}\n```\"\"\"",
+        "detail": "my-app.analyze",
+        "documentation": {}
+    },
+    {
+        "label": "collect_files_from_project",
+        "kind": 2,
+        "importPath": "my-app.analyze",
+        "description": "my-app.analyze",
+        "peekOfCode": "def collect_files_from_project(root_dir: str):\n    file_list = []\n    for dirpath, _, filenames in os.walk(root_dir):\n        for filename in filenames:\n            if filename.endswith(\".py\"):\n                full_path = os.path.join(dirpath, filename)\n                rel_path = os.path.relpath(full_path, root_dir)\n                with open(full_path, \"r\", encoding=\"utf-8\") as f:\n                    content = f.read()\n                file_list.append({\"path\": rel_path, \"content\": content})",
+        "detail": "my-app.analyze",
+        "documentation": {}
+    },
+    {
+        "label": "client",
+        "kind": 5,
+        "importPath": "my-app.analyze",
+        "description": "my-app.analyze",
+        "peekOfCode": "client = openai.OpenAI(api_key=\"your-api-key\")  # ← API 키 입력 또는 환경변수로 설정\ndef analyze_project_with_gpt(files: list[dict]) -> dict:\n    results = {}\n    for file in files:\n        path = file[\"path\"]\n        code = file[\"content\"]\n        prompt = f\"\"\"파일 경로: {path}\n보안 취약점을 찾아주세요. 줄 번호, 문제 설명, 개선 방법을 포함해주세요.\n```python\n{code}",
+        "detail": "my-app.analyze",
+        "documentation": {}
+    }
+]
