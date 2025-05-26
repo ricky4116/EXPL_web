@@ -1,19 +1,43 @@
+# analyze.py
 import os
 import openai
 import json
+import sys
 
-client = openai.OpenAI(api_key="your-api-key")  # ← API 키 입력 또는 환경변수로 설정
+sys.stdout.reconfigure(encoding='utf-8')
+
+client = openai.OpenAI(api_key="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")  # ← API 키 입력 또는 환경변수로 설정
 
 def analyze_project_with_gpt(files: list[dict]) -> dict:
     results = {}
     for file in files:
         path = file["path"]
         code = file["content"]
+        # 추후 파일 확장자에 따라 Python이 외의 언어를 추론해서 프롬프트에 자동 삽입하는 기능 추가가
         prompt = f"""파일 경로: {path}
-보안 취약점을 찾아주세요. 줄 번호, 문제 설명, 개선 방법을 포함해주세요.
+
+아래 코드를 분석하여 보안 취약점을 찾아주세요.
+
+다음과 같은 형식으로만 출력해 주세요:
+
+- xx번째 줄 : (문제 요소 요약)
+    (이유를 간단히 설명)
+    수정 전 → 수정 후
+
+예시:
+- 12번째 줄 : eval() 사용
+    사용자의 입력을 그대로 실행하므로 원격 코드 실행(RCE) 취약점이 존재합니다.
+    eval(user_input) → ast.literal_eval(user_input)
+
+취약점이 없으면 아래와 같이 출력해 주세요:
+- 없음
+
+주의: 반드시 위의 형식을 따르세요. 설명 이외의 다른 요소나 코드 블록, 문법 강조는 포함하지 마세요.
+
 ```python
 {code}
 ```"""
+
         try:
             response = client.chat.completions.create(
                 model="gpt-3.5-turbo",
