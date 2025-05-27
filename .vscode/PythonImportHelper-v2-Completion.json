@@ -1,61 +1,11 @@
 [
     {
-        "label": "Flask",
-        "importPath": "flask",
-        "description": "flask",
-        "isExtraImport": true,
-        "detail": "flask",
-        "documentation": {}
-    },
-    {
-        "label": "request",
-        "importPath": "flask",
-        "description": "flask",
-        "isExtraImport": true,
-        "detail": "flask",
-        "documentation": {}
-    },
-    {
-        "label": "jsonify",
-        "importPath": "flask",
-        "description": "flask",
-        "isExtraImport": true,
-        "detail": "flask",
-        "documentation": {}
-    },
-    {
-        "label": "CORS",
-        "importPath": "flask_cors",
-        "description": "flask_cors",
-        "isExtraImport": true,
-        "detail": "flask_cors",
-        "documentation": {}
-    },
-    {
-        "label": "boto3",
+        "label": "json",
         "kind": 6,
         "isExtraImport": true,
-        "importPath": "boto3",
-        "description": "boto3",
-        "detail": "boto3",
-        "documentation": {}
-    },
-    {
-        "label": "uuid",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "uuid",
-        "description": "uuid",
-        "detail": "uuid",
-        "documentation": {}
-    },
-    {
-        "label": "time",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "time",
-        "description": "time",
-        "detail": "time",
+        "importPath": "json",
+        "description": "json",
+        "detail": "json",
         "documentation": {}
     },
     {
@@ -68,93 +18,12 @@
         "documentation": {}
     },
     {
-        "label": "subprocess",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "subprocess",
-        "description": "subprocess",
-        "detail": "subprocess",
-        "documentation": {}
-    },
-    {
-        "label": "json",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "json",
-        "description": "json",
-        "detail": "json",
-        "documentation": {}
-    },
-    {
         "label": "openai",
         "kind": 6,
         "isExtraImport": true,
         "importPath": "openai",
         "description": "openai",
         "detail": "openai",
-        "documentation": {}
-    },
-    {
-        "label": "upload_to_s3",
-        "kind": 2,
-        "importPath": "my-app.backend.main",
-        "description": "my-app.backend.main",
-        "peekOfCode": "def upload_to_s3():\n    try:\n        file = request.files['file']\n        filename, ext = os.path.splitext(file.filename)\n        timestamp = time.strftime(\"%Y%m%d_%H%M%S\")\n        unique_id = str(uuid.uuid4())[:8]\n        new_filename = f\"{filename}_{timestamp}_{unique_id}{ext}\"\n        s3_client.upload_fileobj(\n            file,\n            BUCKET_NAME,",
-        "detail": "my-app.backend.main",
-        "documentation": {}
-    },
-    {
-        "label": "compile_and_run",
-        "kind": 2,
-        "importPath": "my-app.backend.main",
-        "description": "my-app.backend.main",
-        "peekOfCode": "def compile_and_run():\n    try:\n        filename = request.json['filename']\n        # ↓ 프로젝트 내부 temp 디렉터리를 사용\n        local_path = os.path.join(TEMP_DIR, filename)\n        s3_client.download_file(BUCKET_NAME, filename, local_path)\n        # .c → .exe\n        binary_name = filename.replace('.c', '.exe')\n        binary_path = os.path.join(TEMP_DIR, binary_name)\n        # g++로 컴파일",
-        "detail": "my-app.backend.main",
-        "documentation": {}
-    },
-    {
-        "label": "app",
-        "kind": 5,
-        "importPath": "my-app.backend.main",
-        "description": "my-app.backend.main",
-        "peekOfCode": "app = Flask(__name__)\nCORS(app)\n# S3 세팅\ns3_client = boto3.client(\n    's3',\n    aws_access_key_id='AKIAVJSFQLOWK6VMQL47',\n    aws_secret_access_key='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',\n    region_name='ap-northeast-2'\n)\nBUCKET_NAME = 'graduate-bucket-122231'",
-        "detail": "my-app.backend.main",
-        "documentation": {}
-    },
-    {
-        "label": "s3_client",
-        "kind": 5,
-        "importPath": "my-app.backend.main",
-        "description": "my-app.backend.main",
-        "peekOfCode": "s3_client = boto3.client(\n    's3',\n    aws_access_key_id='AKIAVJSFQLOWK6VMQL47',\n    aws_secret_access_key='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',\n    region_name='ap-northeast-2'\n)\nBUCKET_NAME = 'graduate-bucket-122231'\n# 0. 프로젝트 내 temp 디렉터리 설정\nBASE_DIR = os.path.dirname(os.path.abspath(__file__))  # backend/app\nTEMP_DIR = os.path.join(BASE_DIR, \"temp\")",
-        "detail": "my-app.backend.main",
-        "documentation": {}
-    },
-    {
-        "label": "BUCKET_NAME",
-        "kind": 5,
-        "importPath": "my-app.backend.main",
-        "description": "my-app.backend.main",
-        "peekOfCode": "BUCKET_NAME = 'graduate-bucket-122231'\n# 0. 프로젝트 내 temp 디렉터리 설정\nBASE_DIR = os.path.dirname(os.path.abspath(__file__))  # backend/app\nTEMP_DIR = os.path.join(BASE_DIR, \"temp\")\nif not os.path.exists(TEMP_DIR):\n    os.makedirs(TEMP_DIR)\n# 1. 업로드 API (변경 없음)\n@app.route('/upload', methods=['POST'])\ndef upload_to_s3():\n    try:",
-        "detail": "my-app.backend.main",
-        "documentation": {}
-    },
-    {
-        "label": "BASE_DIR",
-        "kind": 5,
-        "importPath": "my-app.backend.main",
-        "description": "my-app.backend.main",
-        "peekOfCode": "BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # backend/app\nTEMP_DIR = os.path.join(BASE_DIR, \"temp\")\nif not os.path.exists(TEMP_DIR):\n    os.makedirs(TEMP_DIR)\n# 1. 업로드 API (변경 없음)\n@app.route('/upload', methods=['POST'])\ndef upload_to_s3():\n    try:\n        file = request.files['file']\n        filename, ext = os.path.splitext(file.filename)",
-        "detail": "my-app.backend.main",
-        "documentation": {}
-    },
-    {
-        "label": "TEMP_DIR",
-        "kind": 5,
-        "importPath": "my-app.backend.main",
-        "description": "my-app.backend.main",
-        "peekOfCode": "TEMP_DIR = os.path.join(BASE_DIR, \"temp\")\nif not os.path.exists(TEMP_DIR):\n    os.makedirs(TEMP_DIR)\n# 1. 업로드 API (변경 없음)\n@app.route('/upload', methods=['POST'])\ndef upload_to_s3():\n    try:\n        file = request.files['file']\n        filename, ext = os.path.splitext(file.filename)\n        timestamp = time.strftime(\"%Y%m%d_%H%M%S\")",
-        "detail": "my-app.backend.main",
         "documentation": {}
     },
     {

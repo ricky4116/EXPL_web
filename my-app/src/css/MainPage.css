@@ -155,7 +155,6 @@
 }
 
 .hero h2 {
-    margin-bottom: 1rem;
     font-size: 1.5rem;
 }
 
@@ -231,6 +230,7 @@
 
 /* 프로젝트 카드 그리드 */
 .projects-page {
+    margin-left: 15px;
     padding: 1rem;
 }
 
@@ -276,4 +276,36 @@
 
 .empty-list {
     margin-left: 10px;
+}
+
+
+/* 개인정보 약관 스크롤 & 여백 */
+.tos-page {
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+.tos-page.scrollable {
+    /* 상단 헤더(약 60px) + 탭/패딩 고려 높이 */
+    margin-left: 15px;
+    max-height: calc(100vh - 140px);
+    overflow-y: auto;
+}
+
+.tos-page h2 {
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.tos-page h3 {
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    font-size: 1.25rem;
+}
+
+.tos-page p {
+    margin-bottom: 1rem;
+    line-height: 1.6;
+
 }

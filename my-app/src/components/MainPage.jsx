@@ -49,6 +49,18 @@ export default function MainPage() {
         return `${rand}_${suffix}`;
     };
 
+    // 상대 날짜 계산 헬퍼
+    const getRelativeDate = timestamp => {
+        const created = new Date(timestamp);
+        const now = new Date();
+        const diffMs = now.setHours(0, 0, 0, 0) - created.setHours(0, 0, 0, 0);
+        const day = 24 * 60 * 60 * 1000;
+        const daysAgo = Math.floor(diffMs / day);
+        if (daysAgo === 0) return '오늘';
+        if (daysAgo === 1) return '1일 전';
+        return `${daysAgo}일 전`;
+    };
+
     // 생성 핸들러
     const handleCreateProject = async () => {
         const projectName = generateRandomProjectName();
@@ -59,8 +71,11 @@ export default function MainPage() {
                 body: JSON.stringify({ project_name: projectName })
             });
             const json = await res.json();
-            if (res.ok && json.success) setProjects(prev => [json.project, ...prev]);
-            else console.error('Project create error:', json.error);
+            if (res.ok && json.success) {
+                navigate(`/project/${json.project.id}`);
+            } else {
+                console.error('Project create error:', json.error);
+            }
         } catch (err) {
             console.error('Network or server error:', err);
         }
@@ -93,7 +108,13 @@ export default function MainPage() {
         <div className="page-wrapper">
             {/* Top */}
             <header className="top-section">
-                <div className="top-left"><span className="app-title">EXPL</span></div>
+                <div className="top-left">
+                    <span
+                        className="app-title"
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => setActiveNav('main')}
+                    >EXPL</span>
+                </div>
                 <div className="top-right" ref={menuRef}>
                     <div className="user-menu" onClick={() => setShowMenu(v => !v)}>
                         <User size={24} /><ChevronDown size={16} />
@@ -133,8 +154,6 @@ export default function MainPage() {
                                 <section className="hero">
                                     <h2>어떤 프로젝트를 만들겠습니까?</h2>
                                     <div className="hero-input">
-                                        <input placeholder="Describe an app or site you want to create…" />
-                                        <button className="start-btn">Start building</button>
                                     </div>
                                 </section>
                                 {/* 프로젝트 목록 영역 */}
@@ -146,7 +165,7 @@ export default function MainPage() {
                                                 className="project-card"
                                                 onClick={() => navigate(`/project/${p.id}`)}>
                                                 <h3>{p.project_name}</h3>
-                                                <small>{new Date(p.created_at).toLocaleString()}</small>
+                                                <small>{getRelativeDate(p.created_at)}</small>
                                             </div>
                                         ))}
                                     </div>
@@ -155,7 +174,28 @@ export default function MainPage() {
                         )}
                         {activeNav === 'vulnList' && <div className="vuln-list-page"><h2>취약점 정리</h2></div>}
                         {activeNav === 'vulnEdu' && <div className="vuln-edu-page"><h2>취약점 교육</h2></div>}
-                        {activeNav === 'tos' && <div className="tos-page"><h2>개인정보 약관</h2></div>}
+                        {activeNav === 'tos' && (
+                            <div className="tos-page scrollable">
+                                <h2>개인정보 이용약관</h2>
+                                <h3>제1조 (목적)</h3>
+                                <p>이 약관은 이용자가 본 서비스(이하 "서비스")를 이용함에 있어 필요한 조건 및 책임 사항을 규정함을 목적으로 합니다.</p>
+                                <h3>제2조 (파일 보관 및 삭제 정책)</h3>
+                                <p>사용자가 업로드한 모든 파일은 업로드 시점으로부터 1일이 지나면 자동으로 삭제됩니다. 당사는 파일의 지속적 보관을 보장하지 않으며, 삭제 이전 사용자에 의한 사용 또는 손실에 대해서는 어떠한 책임도 지지 않습니다.</p>
+                                <h3>제3조 (분석 결과의 정확성 책임 부인)</h3>
+                                <p>본 서비스는 정적/동적 분석 도구를 활용한 자동화된 분석 결과를 제공합니다. 분석 결과는 참고용으로 제공되며, 절대적인 정확성이나 완전성을 보장하지 않습니다. 분석 결과를 기반으로 한 의사결정 및 결과에 대해서 당사는 책임을 지지 않습니다.</p>
+                                <h3>제4조 (저작권 및 불법 파일 관련 책임)</h3>
+                                <p>사용자는 업로드한 파일이 타인의 권리를 침해하지 않으며, 국내 및 국제법에 저촉되지 않는다는 점을 보증해야 합니다.
+                                    저작권 침해, 불법 콘텐츠 포함, 악성코드 유포 등의 문제가 발생할 경우 모든 책임은 사용자에게 있습니다.
+                                    당사는 해당 콘텐츠의 내용에 대해 사전 검열을 하지 않으며, 발견 시 즉시 삭제 및 법적 대응을 할 수 있습니다.</p>
+                                <h3>제5조 (서비스 제공자의 면책 조항)</h3>
+                                <p>본 서비스는 "있는 그대로(as-is)" 제공되며, 특정 목적에의 적합성이나 비침해성에 대한 보증을 하지 않습니다.
+                                    당사는 서비스의 오류, 중단, 데이터 손실, 해킹 등으로 인해 발생한 손해에 대해 책임을 지지 않습니다.
+                                    천재지변, 통신 장애, 외부 공격 등 당사의 통제를 벗어난 사유로 인해 서비스 이용에 제한이 발생할 경우, 당사는 이에 대해 면책됩니다.</p>
+                                <h3>제6조 (약관의 변경)</h3>
+                                <p>본 약관은 사전 공지 없이 변경될 수 있으며, 변경 시 서비스 내 공지를 통해 고지합니다.
+                                    변경된 약관은 공지 즉시 효력을 가지며, 이후에도 서비스를 이용할 경우 변경된 약관에 동의한 것으로 간주됩니다.</p>
+                            </div>
+                        )}
                     </section>
                 </div>
             </div>

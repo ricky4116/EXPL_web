@@ -170,6 +170,50 @@ app.get('/api/projects', async (req, res) => {
         res.status(500).json({ success: false, error: '프로젝트 목록 조회 실패' });
     }
 });
+// — 프로젝트 이름 수정 (UPDATE)
+app.put('/api/projects/:projectId', async (req, res) => {
+    const { projectId } = req.params;
+    const { project_name } = req.body;
+    try {
+        const { rows } = await pool.query(
+            `UPDATE projects
+           SET project_name = $1
+         WHERE id = $2
+       RETURNING id, project_name, created_at`,
+            [project_name, projectId]
+        );
+        if (!rows.length) {
+            return res.status(404).json({ success: false, error: '프로젝트를 찾을 수 없습니다.' });
+        }
+        res.json({ success: true, project: rows[0] });
+    } catch (err) {
+        console.error('Rename project error:', err);
+        res.status(500).json({ success: false, error: '프로젝트 이름 변경 실패' });
+    }
+});
+
+// — 프로젝트 삭제 (DELETE)
+app.delete('/api/projects/:projectId', async (req, res) => {
+    const { projectId } = req.params;
+    try {
+        // (선택) 외래키로 파일도 같이 삭제되도록 CASCADE 설정이 안 되어 있다면
+        // await pool.query('DELETE FROM files WHERE project_id = $1', [projectId]);
+
+        const result = await pool.query(
+            `DELETE FROM projects
+           WHERE id = $1
+        RETURNING id`,
+            [projectId]
+        );
+        if (!result.rows.length) {
+            return res.status(404).json({ success: false, error: '프로젝트를 찾을 수 없습니다.' });
+        }
+        res.json({ success: true });
+    } catch (err) {
+        console.error('Delete project error:', err);
+        res.status(500).json({ success: false, error: '프로젝트 삭제 실패' });
+    }
+});
 
 // — 특정 프로젝트의 파일 목록 조회 (READ)
 app.get('/api/projects/:projectId/files', async (req, res) => {
