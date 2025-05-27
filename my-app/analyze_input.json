@@ -1,0 +1,7 @@
+[
+  {
+    "id": 25,
+    "name": "asdasd",
+    "content": "import os\r\n\r\ndef delete_file(filename):\r\n    os.system(\"rm \" + filename)\r\n\r\ndef get_user_data(user_input):\r\n    eval(\"print(\" + user_input + \")\")\r\n\r\ndef insecure_compare(password1, password2):\r\n    if password1 == password2:\r\n        print(\"Access granted\")\r\n\r\nfilename = input(\"삭제할 파일명을 입력하세요: \")\r\ndelete_file(filename)\r\n\r\nuser_code = input(\"실행할 코드를 입력하세요: \")\r\nget_user_data(user_code)\r\n\r\ninsecure_compare(\"admin\", \"admin\")\r\n\r\n"
+  }
+]

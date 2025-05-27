@@ -309,3 +309,37 @@
     line-height: 1.6;
 
 }
+
+/* 취약점 보고서 테이블 스타일 */
+.vuln-list-page {
+    overflow-x: auto;
+    padding: 1rem;
+}
+
+.vuln-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.vuln-table th,
+.vuln-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.vuln-table th {
+    background-color: #000000;
+    text-align: left;
+    font-weight: bold;
+}
+
+.vuln-table tr:nth-child(even) {
+    background-color: #fafafa;
+}
+
+.vuln-table pre {
+    margin: 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+}

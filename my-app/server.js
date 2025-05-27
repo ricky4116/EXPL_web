@@ -10,6 +10,11 @@ const { Pool } = require('pg');
 
 const app = express();
 
+const fs = require('fs');
+const path = require('path');
+const util = require('util');
+const execAsync = util.promisify(exec);
+
 // 신뢰할 프록시 설정
 if (process.env.NODE_ENV === 'production') {
     app.set('trust proxy', 1);
@@ -113,20 +118,59 @@ app.post('/api/logout', (req, res) => {
 });
 
 // — GPT 분석 API
-app.post('/api/analyze', (req, res) => {
-    exec('python analyze.py', (error, stdout, stderr) => {
-        if (error) {
-            console.error('Python 실행 오류:', stderr);
-            return res.status(500).json({ error: '분석 중 오류 발생' });
+app.post('/api/analyze', async (req, res) => {
+    const { project_id } = req.body;
+    if (!project_id) {
+        return res.status(400).json({ success: false, error: 'project_id가 필요합니다.' });
+    }
+
+    try {
+        // 1. 해당 프로젝트의 파일 목록 불러오기
+        const { rows: files } = await pool.query(
+            `SELECT id, file_name, file_content FROM files WHERE project_id = $1`,
+            [project_id]
+        );
+
+        if (files.length === 0) {
+            return res.json({ success: true, inserted: 0 });
         }
+
+        // 2. analyze.py에 넘길 JSON 파일 생성
+        const inputForAnalysis = files.map(f => ({
+            id: f.id,
+            name: f.file_name,
+            content: f.file_content
+        }));
+
+        const tempPath = path.join(__dirname, 'analyze_input.json');
+        fs.writeFileSync(tempPath, JSON.stringify(inputForAnalysis, null, 2));
+
+        // 3. analyze.py 실행
+        const { stdout } = await execAsync(`python analyze.py ${tempPath}`);
+        const result = JSON.parse(stdout); // vulnerabilities 리스트
+
+        // 4. 분석 결과 DB에 저장
+        for (const vuln of result) {
+            const { id: fileId, vuln_name, vuln_description, old_code, new_code } = vuln;
+            await pool.query(
+                `INSERT INTO vulnerabilities (vuln_name, vuln_description, old_code, new_code, project_id, file_id)
+                 VALUES ($1, $2, $3, $4, $5, $6)`,
+                [vuln_name, vuln_description, old_code, new_code, project_id, fileId]
+            );
+        }
+
+        // 5. 임시 파일 삭제
         try {
-            const result = JSON.parse(stdout);
-            res.json(result);
+            fs.unlinkSync(tempPath);
         } catch (e) {
-            console.error('분석 결과 파싱 실패:', stdout);
-            res.status(500).json({ error: '결과 처리 실패' });
+            console.warn("⚠️ 임시 파일 삭제 실패:", e.message);
         }
-    });
+
+        res.json({ success: true, inserted: result.length });
+    } catch (err) {
+        console.error('❌ 분석 중 오류:', err);
+        res.status(500).json({ success: false, error: '서버 오류 또는 분석 실패' });
+    }
 });
 
 // — 프로젝트 생성
@@ -305,6 +349,38 @@ app.delete('/api/projects/:projectId/files/:fileId', async (req, res) => {
     } catch (err) {
         console.error('Delete file error:', err);
         res.status(500).json({ success: false, error: '파일 삭제 실패' });
+    }
+});
+
+// — 취약점 목록 조회
+app.get('/api/vulnerabilities', async (req, res) => {
+    const userEmail = req.session.userEmail;
+    if (!userEmail) {
+        return res.status(401).json({ success: false, error: '로그인이 필요합니다.' });
+    }
+    try {
+        const { rows } = await pool.query(
+            `SELECT
+                 v.id,
+                 v.vuln_name,
+                 v.vuln_description,
+                 v.old_code,
+                 v.new_code,
+                 v.project_id,
+                 v.file_id,
+                 p.project_name,
+                 f.file_name
+             FROM vulnerabilities v
+             JOIN projects p ON v.project_id = p.id
+             JOIN files f    ON v.file_id    = f.id
+             WHERE p.user_email = $1
+             ORDER BY v.id DESC`,
+            [userEmail]
+        );
+        res.json({ success: true, vulnerabilities: rows });
+    } catch (err) {
+        console.error('Get vulnerabilities error:', err);
+        res.status(500).json({ success: false, error: '취약점 조회 실패' });
     }
 });
 

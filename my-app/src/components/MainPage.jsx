@@ -12,6 +12,7 @@ export default function MainPage() {
     const [activeNav, setActiveNav] = useState('main');
     const [showMenu, setShowMenu] = useState(false);
     const [projects, setProjects] = useState([]);
+    const [vulnerabilities, setVulnerabilities] = useState([]);
     const [userEmail, setUserEmail] = useState('');
     const navigate = useNavigate();
     const menuRef = useRef(null);
@@ -40,6 +41,19 @@ export default function MainPage() {
                 .catch(err => console.error('Projects fetch error:', err));
         }
     }, [activeNav, userEmail]);
+
+
+    useEffect(() => {
+        if (activeNav === 'vulnList') {
+            fetch('http://localhost:4000/api/vulnerabilities', { credentials: 'include' })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) setVulnerabilities(data.vulnerabilities);
+                    else console.error('Fetch vulnerabilities failed:', data.error);
+                })
+                .catch(err => console.error('Vulnerabilities fetch error:', err));
+        }
+    }, [activeNav]);
 
     // 무작위 프로젝트명 생성
     const generateRandomProjectName = () => {
@@ -172,7 +186,27 @@ export default function MainPage() {
                                 </div>
                             </>
                         )}
-                        {activeNav === 'vulnList' && <div className="vuln-list-page"><h2>취약점 정리</h2></div>}
+
+                        {activeNav === 'vulnList' && (
+                            <div className="vuln-list-page">
+                                <h2>취약점 보고서</h2>
+                                {vulnerabilities.map(v => (
+                                    <div key={v.id} className="vuln-card">
+                                        <h3>{v.project_name} / {v.file_name}</h3>
+                                        <p><strong>취약점 이름:</strong> {v.vuln_name}</p>
+                                        <p><strong>설명:</strong> {v.vuln_description}</p>
+                                        <div className="code-block">
+                                            <strong>이전 코드:</strong>
+                                            <pre>{v.old_code}</pre>
+                                        </div>
+                                        <div className="code-block">
+                                            <strong>수정된 코드:</strong>
+                                            <pre>{v.new_code}</pre>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                         {activeNav === 'vulnEdu' && <div className="vuln-edu-page"><h2>취약점 교육</h2></div>}
                         {activeNav === 'tos' && (
                             <div className="tos-page scrollable">

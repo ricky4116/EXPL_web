@@ -27,6 +27,24 @@
         "documentation": {}
     },
     {
+        "label": "sys",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "sys",
+        "description": "sys",
+        "detail": "sys",
+        "documentation": {}
+    },
+    {
+        "label": "re",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "re",
+        "description": "re",
+        "detail": "re",
+        "documentation": {}
+    },
+    {
         "label": "_Known",
         "kind": 6,
         "importPath": "my-app.node_modules.flatted.python.flatted",
@@ -63,20 +81,20 @@
         "documentation": {}
     },
     {
-        "label": "analyze_project_with_gpt",
+        "label": "parse_gpt_response",
         "kind": 2,
         "importPath": "my-app.analyze",
         "description": "my-app.analyze",
-        "peekOfCode": "def analyze_project_with_gpt(files: list[dict]) -> dict:\n    results = {}\n    for file in files:\n        path = file[\"path\"]\n        code = file[\"content\"]\n        prompt = f\"\"\"파일 경로: {path}\n보안 취약점을 찾아주세요. 줄 번호, 문제 설명, 개선 방법을 포함해주세요.\n```python\n{code}\n```\"\"\"",
+        "peekOfCode": "def parse_gpt_response(file_id, file_name, response_text):\n    if \"- 없음\" in response_text:\n        return []\n    pattern = re.compile(r'- (\\d+)번째 줄 ?: (.+?)\\n\\s+(.+?)\\n\\s+(.+?) → (.+)')\n    findings = []\n    for match in pattern.finditer(response_text):\n        _, vuln_name, vuln_description, old_code, new_code = match.groups()\n        findings.append({\n            \"id\": file_id,\n            \"file_name\": file_name,",
         "detail": "my-app.analyze",
         "documentation": {}
     },
     {
-        "label": "collect_files_from_project",
+        "label": "analyze",
         "kind": 2,
         "importPath": "my-app.analyze",
         "description": "my-app.analyze",
-        "peekOfCode": "def collect_files_from_project(root_dir: str):\n    file_list = []\n    for dirpath, _, filenames in os.walk(root_dir):\n        for filename in filenames:\n            if filename.endswith(\".py\"):\n                full_path = os.path.join(dirpath, filename)\n                rel_path = os.path.relpath(full_path, root_dir)\n                with open(full_path, \"r\", encoding=\"utf-8\") as f:\n                    content = f.read()\n                file_list.append({\"path\": rel_path, \"content\": content})",
+        "peekOfCode": "def analyze(files):\n    results = []\n    for f in files:\n        file_id = f[\"id\"]\n        file_name = f[\"name\"]\n        code = f[\"content\"]\n        prompt = f\"\"\"파일명: {file_name}\n아래 코드를 분석하여 보안 취약점을 찾아주세요.\n다음과 같은 형식으로만 출력해 주세요:\n- xx번째 줄 : (문제 요소 요약)",
         "detail": "my-app.analyze",
         "documentation": {}
     },
@@ -85,7 +103,7 @@
         "kind": 5,
         "importPath": "my-app.analyze",
         "description": "my-app.analyze",
-        "peekOfCode": "client = openai.OpenAI(api_key=\"your-api-key\")  # ← API 키 입력 또는 환경변수로 설정\ndef analyze_project_with_gpt(files: list[dict]) -> dict:\n    results = {}\n    for file in files:\n        path = file[\"path\"]\n        code = file[\"content\"]\n        prompt = f\"\"\"파일 경로: {path}\n보안 취약점을 찾아주세요. 줄 번호, 문제 설명, 개선 방법을 포함해주세요.\n```python\n{code}",
+        "peekOfCode": "client = openai.OpenAI(api_key=\"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\")  # ← API 키 입력 또는 환경변수로 설정\ndef parse_gpt_response(file_id, file_name, response_text):\n    if \"- 없음\" in response_text:\n        return []\n    pattern = re.compile(r'- (\\d+)번째 줄 ?: (.+?)\\n\\s+(.+?)\\n\\s+(.+?) → (.+)')\n    findings = []\n    for match in pattern.finditer(response_text):\n        _, vuln_name, vuln_description, old_code, new_code = match.groups()\n        findings.append({\n            \"id\": file_id,",
         "detail": "my-app.analyze",
         "documentation": {}
     }

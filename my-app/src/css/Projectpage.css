@@ -66,13 +66,8 @@
     min-height: 0;
 
     flex: 0 0 200px;
-    /* flex-grow:0, flex-shrink:0, flex-basis:200px */
-    width: 200px;
-    /* flex-basis 와 동일하게 */
     min-width: 200px;
-    /* 축소 방지 */
     max-width: 200px;
-    /* 확대 방지 */
 }
 
 .explorer-header {
@@ -90,6 +85,7 @@
 
 .file-item {
     display: flex;
+    align-items: center;
     justify-content: space-between;
     padding: 6px 8px;
     cursor: pointer;
@@ -149,11 +145,17 @@
     align-items: center;
     padding-left: 8px;
     border-bottom: 1px solid #333;
+    overflow-x: auto;
+    white-space: nowrap;
 }
 
 .editor-tabs .tab {
     margin-right: 12px;
     color: #ccc;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 150px;
 }
 
 .editor-tabs .tab.active {
@@ -161,8 +163,16 @@
     font-weight: bold;
 }
 
+.editor-area {
+    flex-grow: 1;
+    min-height: 0;
+    width: 100%;
+}
+
+/* 분석/실행 결과 탭 영역 */
 .console-pane {
-    width: 300px;
+    height: 300px;
+    width: 100%;
     background: #292D3E;
     border-left: 1px solid #333;
     display: flex;
@@ -200,20 +210,16 @@
     min-height: 0;
 }
 
-/* 파일 리스트 항목 세로 정렬 */
-.file-item {
-    display: flex;
-    align-items: center;
-    /* 세로 가운데 정렬 */
-    justify-content: space-between;
+.analysis-output {
+    white-space: pre-wrap;
+    color: #eee;
 }
 
-/* 메뉴 컨테이너 위치 지정 */
+/* 드롭다운 메뉴 */
 .menu-container {
     position: relative;
 }
 
-/* ⋮ 버튼 스타일 */
 .menu-btn {
     background: none;
     border: none;
@@ -227,11 +233,9 @@
     color: #fff;
 }
 
-/* 드롭다운 메뉴 박스 */
 .menu-dropdown {
     position: absolute;
     top: 100%;
-    /* 버튼 바로 아래에 */
     right: 0;
     background: #333646;
     border: 1px solid #444;
@@ -242,7 +246,6 @@
     z-index: 10;
 }
 
-/* 드롭다운 메뉴 항목 버튼 */
 .menu-dropdown button {
     background: none;
     border: none;
