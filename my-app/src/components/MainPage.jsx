@@ -1,9 +1,17 @@
-// src/components/MainPage.jsx
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-    Home, FileText, Info, FileSignature,
-    User, ChevronDown, Settings, LogOut
+    Home,
+    FileText,
+    Info,
+    FileSignature,
+    User,
+    ChevronDown,
+    Settings,
+    LogOut,
+    AlertTriangle,
+    Code,
+    RefreshCw
 } from 'lucide-react';
 import '../css/MainPage.css';
 
@@ -186,25 +194,39 @@ export default function MainPage() {
                                 </div>
                             </>
                         )}
-
-                        {activeNav === 'vulnList' && (
+                         {activeNav === 'vulnList' && (
                             <div className="vuln-list-page">
                                 <h2>취약점 보고서</h2>
-                                {vulnerabilities.map(v => (
-                                    <div key={v.id} className="vuln-card">
-                                        <h3>{v.project_name} / {v.file_name}</h3>
-                                        <p><strong>취약점 이름:</strong> {v.vuln_name}</p>
-                                        <p><strong>설명:</strong> {v.vuln_description}</p>
-                                        <div className="code-block">
-                                            <strong>이전 코드:</strong>
-                                            <pre>{v.old_code}</pre>
+                                <div className="vuln-cards">
+                                    {vulnerabilities.map(v => (
+                                        <div key={v.id} className="vuln-card">
+                                            <div className="vuln-card-header">
+                                                <AlertTriangle size={20} />
+                                                <span className="vuln-title">{v.vuln_name}</span>
+                                            </div>
+                                            <div className="vuln-card-body">
+                                                <div className="vuln-desc">
+                                                    <Info size={16} />
+                                                    <p>{v.vuln_description}</p>
+                                                </div>
+                                                <div className="code-group">
+                                                    <div className="code-item">
+                                                        <div className="code-label">
+                                                            <Code size={16} /><span>이전</span>
+                                                        </div>
+                                                        <pre>{v.old_code}</pre>
+                                                    </div>
+                                                    <div className="code-item">
+                                                        <div className="code-label">
+                                                            <RefreshCw size={16} /><span>수정</span>
+                                                        </div>
+                                                        <pre>{v.new_code}</pre>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div className="code-block">
-                                            <strong>수정된 코드:</strong>
-                                            <pre>{v.new_code}</pre>
-                                        </div>
-                                    </div>
-                                ))}
+                                    ))}
+                                </div>
                             </div>
                         )}
                         {activeNav === 'vulnEdu' && <div className="vuln-edu-page"><h2>취약점 교육</h2></div>}

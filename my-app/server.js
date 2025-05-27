@@ -146,7 +146,7 @@ app.post('/api/analyze', async (req, res) => {
         fs.writeFileSync(tempPath, JSON.stringify(inputForAnalysis, null, 2));
 
         // 3. analyze.py 실행
-        const { stdout } = await execAsync(`python analyze.py ${tempPath}`);
+        const { stdout } = await execAsync(`python "analyze.py" "${tempPath}"`);
         const result = JSON.parse(stdout); // vulnerabilities 리스트
 
         // 4. 분석 결과 DB에 저장
