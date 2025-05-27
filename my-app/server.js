@@ -166,7 +166,7 @@ app.post('/api/analyze', async (req, res) => {
             console.warn("⚠️ 임시 파일 삭제 실패:", e.message);
         }
 
-        res.json({ success: true, inserted: result.length });
+        res.json({ success: true, inserted: result.length, result });
     } catch (err) {
         console.error('❌ 분석 중 오류:', err);
         res.status(500).json({ success: false, error: '서버 오류 또는 분석 실패' });

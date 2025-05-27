@@ -142,20 +142,28 @@ export default function ProjectPage() {
 
     // 11) 분석 실행 버튼
     const run = async () => {
-        setRunOutput('✅ 실행은 현재 지원되지 않습니다. 분석 결과를 확인하세요.');
-        try {
-            const res = await fetch('/api/analyze', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ project_id: Number(projectId) })
-            });
-            const result = await res.json();
-            if (result.success) setAnalysisResult(`🔍 분석 완료 (${result.inserted}건 DB 저장됨)`);
-            else setAnalysisResult(`❌ 분석 실패: ${result.error}`);
-        } catch {
-            setAnalysisResult('❌ 분석 중 오류');
+    setRunOutput('✅ 실행은 현재 지원되지 않습니다. 분석 결과를 확인하세요.');
+    try {
+        const res = await fetch('/api/analyze', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ project_id: Number(projectId) })
+        });
+        const result = await res.json();
+
+        if (result.success) {
+            const formatted = result.result.map(vuln =>
+                `📄 ${vuln.file_name}\n- ${vuln.vuln_name}\n    ${vuln.vuln_description}\n    ${vuln.old_code} → ${vuln.new_code}`
+            ).join('\n\n');
+
+            setAnalysisResult(`🔍 분석 완료 (${result.inserted}건 DB 저장됨)\n\n${formatted}`);
+        } else {
+            setAnalysisResult(`❌ 분석 실패: ${result.error}`);
         }
-    };
+    } catch {
+        setAnalysisResult('❌ 분석 중 오류');
+    }
+};
 
     // 12) 콘솔 자동 스크롤
     useEffect(() => {
