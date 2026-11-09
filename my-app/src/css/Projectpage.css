@@ -1,0 +1,267 @@
+.replit-ide {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background: #292D3E;
+    color: #ddd;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.replit-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 40px;
+    padding: 0 12px;
+    background: #292D3E;
+    border-bottom: 1px solid #333;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+}
+
+.icon-btn {
+    background: none;
+    border: none;
+    color: #ccc;
+    font-size: 16px;
+    cursor: pointer;
+    margin-right: 8px;
+}
+
+.project-title {
+    font-weight: bold;
+    cursor: pointer;
+    color: #fff;
+}
+
+.header-right .run-btn {
+    background: #22aaff;
+    border: none;
+    color: #111;
+    font-weight: bold;
+    padding: 4px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.header-right .run-btn:hover {
+    background: #00c4ff;
+}
+
+.replit-body {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+}
+
+.file-explorer {
+    width: 200px;
+    background: #292D3E;
+    border-right: 1px solid #333;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+
+    flex: 0 0 200px;
+    min-width: 200px;
+    max-width: 200px;
+}
+
+.explorer-header {
+    padding: 8px;
+    font-size: 12px;
+    text-transform: uppercase;
+    color: #888;
+}
+
+.file-list {
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+}
+
+.file-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 8px;
+    cursor: pointer;
+}
+
+.file-item:hover {
+    background: #333646;
+}
+
+.file-item.active {
+    background: #3a3a3a;
+    color: #fff;
+}
+
+.del-btn {
+    background: none;
+    border: none;
+    color: #888;
+    cursor: pointer;
+}
+
+.explorer-footer {
+    padding: 8px;
+    display: flex;
+    gap: 4px;
+}
+
+.new-file,
+.new-folder {
+    flex: 1;
+    background: #22aaff;
+    border: none;
+    color: #111;
+    padding: 4px;
+    font-size: 12px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.new-file:hover,
+.new-folder:hover {
+    background: #00c4ff;
+}
+
+.main-pane {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: #292D3E;
+    min-height: 0;
+}
+
+.editor-tabs {
+    display: flex;
+    background: #292D3E;
+    height: 28px;
+    align-items: center;
+    padding-left: 8px;
+    border-bottom: 1px solid #333;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.editor-tabs .tab {
+    margin-right: 12px;
+    color: #ccc;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 150px;
+}
+
+.editor-tabs .tab.active {
+    color: #fff;
+    font-weight: bold;
+}
+
+.editor-area {
+    flex-grow: 1;
+    min-height: 0;
+    width: 100%;
+}
+
+/* 분석/실행 결과 탭 영역 */
+.console-pane {
+    height: 300px;
+    width: 100%;
+    background: #292D3E;
+    border-left: 1px solid #333;
+    display: flex;
+    flex-direction: column;
+}
+
+.console-tabs {
+    display: flex;
+    height: 28px;
+    background: #292D3E;
+    border-bottom: 1px solid #333;
+}
+
+.console-tab {
+    flex: 1;
+    text-align: center;
+    line-height: 28px;
+    color: #888;
+    cursor: pointer;
+}
+
+.console-tab.active {
+    background: #292D3E;
+    color: #fff;
+    font-weight: bold;
+}
+
+.console-view {
+    flex: 1;
+    background: #292D3E;
+    padding: 8px;
+    overflow-y: auto;
+    font-family: monospace;
+    font-size: 13px;
+    min-height: 0;
+}
+
+.analysis-output {
+    white-space: pre-wrap;
+    color: #eee;
+}
+
+/* 드롭다운 메뉴 */
+.menu-container {
+    position: relative;
+}
+
+.menu-btn {
+    background: none;
+    border: none;
+    color: #888;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 0 4px;
+}
+
+.menu-btn:hover {
+    color: #fff;
+}
+
+.menu-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: #333646;
+    border: 1px solid #444;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    min-width: 120px;
+    z-index: 10;
+}
+
+.menu-dropdown button {
+    background: none;
+    border: none;
+    color: #ccc;
+    padding: 6px 12px;
+    text-align: left;
+    cursor: pointer;
+    width: 100%;
+}
+
+.menu-dropdown button:hover {
+    background: #444;
+    color: #fff;
+}
+
+.file-label {
+    display: block;
+    width: 100%;
+}

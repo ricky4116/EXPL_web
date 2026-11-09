@@ -1,0 +1,7 @@
+[
+  {
+    "id": 3,
+    "name": "test.py",
+    "content": "import os\r\nimport pickle\r\nimport subprocess\r\n\r\ndef load_session(data):\r\n    return pickle.loads(data)\r\n\r\ndef check_network(ip_address):\r\n    os.system(\"ping -c 1 \" + ip_address)\r\n\r\ndef run_user_calculation(formula):\r\n    return eval(formula)\r\n\r\nDB_PASSWORD = \"admin_super_secret_password_1234\"\r\n\r\ndef read_log(filename):\r\n    file_path = \"/var/log/app/\" + filename\r\n    with open(file_path, \"r\") as f:\r\n        return f.read()"
+  }
+]

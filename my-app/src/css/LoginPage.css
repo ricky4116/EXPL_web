@@ -1,0 +1,118 @@
+/* 1) 전역 박스 모델 리셋 (패딩/보더가 width에 포함) */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* 2) 전체 2-column 컨테이너 */
+.login-container {
+    display: flex;
+    height: 100vh;
+    font-family: sans-serif;
+    margin: 0;
+}
+
+/* 3) 좌우 컬럼을 정확히 50% 할당 */
+.login-form,
+.login-image {
+    flex: 0 0 50%;
+    /* flex-grow:0, flex-shrink:0, flex-basis:50% */
+    /* width:50%;       /* flex-basis로 충분하므로 생략 가능 */
+}
+
+/* 4) 좌측 폼 컬럼 – 내부 컨텐츠만 max-width로 제한하고 중앙 정렬 */
+.login-form {
+    max-width: 400px;
+    padding: 40px 30px;
+    margin: auto;
+    /* 좌우·상하 auto로 중앙에 배치 */
+}
+
+/* 5) 폼 헤더 & 인풋 & 버튼 */
+.login-form h2 {
+    margin-bottom: 24px;
+    font-size: 1.5rem;
+}
+
+.login-form input,
+.btn {
+    width: 100%;
+    /* padding 포함 100% */
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    border-radius: 6px;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+.login-form input {
+    border: 1px solid #ddd;
+}
+
+.btn {
+    border: none;
+    cursor: pointer;
+}
+
+.btn.primary {
+    background-color: #5b4b8a;
+    color: white;
+    margin-bottom: 12px;
+}
+
+.social-btns .btn {
+    background-color: #e4e4e4;
+}
+
+/* 6) 링크 스타일 */
+.forgot {
+    display: block;
+    margin: 8px 0 24px;
+    color: #555;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.signup {
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+.signup a {
+    color: #5b4b8a;
+    text-decoration: none;
+}
+
+/* 7) 우측 그라데이션 컬럼 */
+.login-image {
+    position: relative;
+    background: linear-gradient(100deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-image .overlay {
+    text-align: center;
+    color: white;
+    padding: 20px;
+}
+
+.login-image h1 {
+    font-size: 2.5rem;
+    letter-spacing: 1px;
+    margin: 0;
+}
+
+.btn .icon {
+    width: 1.0em;
+    /* 아이콘 크기 */
+    height: 1.0em;
+    margin-right: 0.3em;
+    /* 텍스트와 아이콘 간격 */
+    mix-blend-mode: multiply;
+    opacity: 0.8;
+}
