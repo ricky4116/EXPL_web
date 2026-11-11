@@ -32,7 +32,7 @@
 ## 🏗️ 시스템 아키텍처 (System Architecture)
 
 ```mermaid
-flowchart TD
+flowchart LR
     %% Styling
     classDef client fill:#1e293b,stroke:#38bdf8,stroke-width:2px,color:#f8fafc;
     classDef server fill:#0f172a,stroke:#818cf8,stroke-width:2px,color:#f8fafc;
@@ -43,17 +43,17 @@ flowchart TD
     %% Nodes
     A["💻 Frontend<br>(React / Monaco Editor)"]:::client
     B["🌐 Express Server<br>(server.js)"]:::server
-    C{"🔍 SHA-256 Cache Check"}:::server
+    C{"🔍 SHA-256<br>Cache Check"}:::server
     D[("🗄️ PostgreSQL Cache<br>(analysis_cache)")]:::db
-    E["⚡ Async Job Queue<br>(In-Memory Map)"]:::server
+    E["⚡ Async Job Queue<br>(In-Memory Map / BullMQ)"]:::server
     F["⚙️ Worker Node<br>(processAnalysisJob)"]:::server
     G["🐍 Python Subprocess<br>(analyze.py)"]:::worker
-    H["🤖 Gemini 3.8 / 2.5 Flash API"]:::external
-    I[("🗄️ PostgreSQL Database<br>(vulnerabilities)")]:::db
+    H["🤖 Gemini 2.0 / 2.5 Flash API"]:::external
+    I[("🗄️ PostgreSQL DB<br>(vulnerabilities)")]:::db
 
     %% Pipeline Flow
     A -->|"1. POST /api/analyze"| B
-    B -->|"2. 즉시 202 Accepted (Job ID 반환)"| A
+    B -->|"2. 즉시 202 Accepted (Job ID)"| A
     A -.->|"Polling (상태 주기적 조회)"| B
 
     B -->|"코드 해시 생성"| C
@@ -65,10 +65,11 @@ flowchart TD
     F -->|"execFileAsync"| G
 
     subgraph Python_SAST ["Python SAST Pipeline (analyze.py)"]
-        G1["코드 정규화 및 언어 판별"]
-        G2["Structured JSON 프롬프트 생성"]
-        G3["지수 백오프 기반 재시도 (503/429 대응)"]
-        G4["마크다운 백틱 정제 및 JSON 파싱"]
+        direction TB
+        G1["1. 코드 정규화 및 언어 판별"]
+        G2["2. Structured JSON 프롬프트 생성"]
+        G3["3. 지수 백오프 재시도 (503/429 대응)"]
+        G4["4. 마크다운 백틱 정제 및 JSON 파싱"]
         G1 --> G2 --> G3 --> G4
     end
 
