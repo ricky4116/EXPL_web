@@ -56,13 +56,14 @@ flowchart TD
     A -->|"1. POST /api/analyze"| B
     B -->|"2. 즉시 202 Accepted (Job ID 반환)"| A
     A -.->|"Polling (상태 주기적 조회)"| B
+
     B -->|"코드 해시 생성"| C
     C -->|"Cache Hit (0.1s)"| D
     D -.->|"기존 결과 즉시 반환"| B
+
     C -->|"Cache Miss (신규 작업 등록)"| E
     E -->|"백그라운드 스케줄링"| F
     F -->|"execFileAsync"| G
-
 
 
     subgraph Python_SAST ["Python SAST Pipeline (analyze.py)"]
